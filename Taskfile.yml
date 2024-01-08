@@ -1,0 +1,44 @@
+version: 3
+
+# gotask document url:
+# https://taskfile.dev/usage/
+
+vars:
+  APPNAME:
+    sh: cat go.mod | grep ^module | awk '{print $2}' | awk -F/ '{print $NF}'
+  APPNAME_FULL:
+    sh: cat go.mod | grep ^module | awk '{print $2}'
+  REVISION:
+    sh: git rev-parse --short HEAD 2>/dev/null || echo 000000
+  BRANCH:
+    sh: git rev-parse --abbrev-ref HEAD | sed -e 's/\//-/g' || echo branch-unknown
+  HOME:
+    sh: echo $HOME
+
+tasks:
+  go_build:
+    desc: "build binary for local test"
+    vars:
+      BUILD_FLAGS:
+        sh: printf '-ldflags="-s -w -X "{{.APPNAME}}/cmd.Revision=%s" -extldflags -static"' {{.REVISION}}-{{.BRANCH}}
+    cmds:
+      - task: test
+      - GOOS=darwin GOARCH=arm64 go build -a -tags netgo -installsuffix netgo {{.BUILD_FLAGS}} -o ./bin/{{.APPNAME}}.mac.arm64
+
+  install_gotest:
+    cmds:
+      - which gotest || go get github.com/rakyll/gotest && go install github.com/rakyll/gotest
+
+  test:
+    desc: "go test for all packages"
+    dir: .
+    cmds:
+      - task: install_gotest
+      - gotest {{.APPNAME_FULL}}/...
+
+  test-with-run:
+    desc: "go test for specific packages(-- testpkg)"
+    dir: .
+    cmds:
+      - task: install_gotest
+      - gotest {{.APPNAME_FULL}}/... -run {{.CLI_ARGS}}

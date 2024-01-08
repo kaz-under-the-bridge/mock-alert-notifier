@@ -20,28 +20,27 @@ func init() {
 }
 
 type User struct {
-	ID           int    `json:"id"`
-	FamilyName   string `json:"name"`
-	GivenName    string `json:"given_name"`
-	Organization string `json:"organization"`
-	Email        string `json:"email"`        // regexEmailに正規表現を定義
-	PhoneNumber  string `json:"phone_number"` // regexPhoneNumberに正規表現を定義
+	ID             int    `json:"id"`
+	FamilyName     string `json:"name"`
+	GivenName      string `json:"given_name"`
+	Email          string `json:"email"`        // regexEmailに正規表現を定義
+	PhoneNumber    string `json:"phone_number"` // regexPhoneNumberに正規表現を定義
+	OrganizationID int    `json:"organization_id"`
 }
 
 func NewUser(
 	id int,
-	familyName, givenName,
-	organization,
-	email,
-	phoneNumber string,
+	familyName, givenName string,
+	email, phoneNumber string,
+	organizationId int,
 ) *User {
 	u := &User{
-		ID:           id,
-		FamilyName:   familyName,
-		GivenName:    givenName,
-		Organization: organization,
-		Email:        email,
-		PhoneNumber:  phoneNumber,
+		ID:             id,
+		FamilyName:     familyName,
+		GivenName:      givenName,
+		Email:          email,
+		PhoneNumber:    phoneNumber,
+		OrganizationID: organizationId,
 	}
 	u.verify()
 
@@ -87,50 +86,58 @@ func (us *Users) Len() int {
 	return cnt
 }
 
-func (us *Users) FindByID(id int) *User {
-	for _, u := range *us {
+func (us Users) FindByID(id int) (*User, bool) {
+	for _, u := range us {
 		if u.ID == id {
-			return u
+			return u, true
 		}
 	}
-	return nil
+	return nil, false
 }
 
-func (us *Users) FindBySameOrganization(u *User) []*User {
-	users := make([]*User, 0, len(*us))
-
-	for _, user := range *us {
-		if user.Organization == u.Organization {
-			users = append(users, user)
+func (us Users) FindByEmail(email string) (*User, bool) {
+	for _, u := range us {
+		if u.Email == email {
+			return u, true
 		}
 	}
-	return users
+	return nil, false
+}
+
+func (us *Users) FindBySameOrganization(u *User) (*Users, bool) {
+	users := Users{}
+	flag := false
+
+	for _, user := range *us {
+		if user.OrganizationID == u.OrganizationID {
+			users.Push(user)
+			flag = true
+		}
+	}
+	return &users, flag
 }
 
 func (u User) verify() {
+	// ID列（A列・D列
 	if u.FamilyName == "" {
-		UserErrors.Push(&InvalidUserFamilyNameError{id: u.ID, cause: "空白です"})
+		UserErrors.Push(&InvalidUserFamilyNameError{ID: u.ID, Cause: "空白です"})
 	}
 
 	if u.GivenName == "" {
-		UserErrors.Push(&InvalidUserGivenNameError{id: u.ID, cause: "空白です"})
-	}
-
-	if u.Organization == "" {
-		UserErrors.Push(&InvalidUserOrganizationError{id: u.ID, cause: "空白です"})
+		UserErrors.Push(&InvalidUserGivenNameError{ID: u.ID, Cause: "空白です"})
 	}
 
 	if u.Email == "" {
-		UserErrors.Push(&InvalidUserEmailError{id: u.ID, cause: "空白です"})
+		UserErrors.Push(&InvalidUserEmailError{ID: u.ID, Cause: "空白です"})
 	}
 
 	// verify email format
 	if !regexEmail.MatchString(u.Email) {
-		UserErrors.Push(&InvalidUserEmailError{id: u.ID, original: u.Email, cause: "フォーマットが不正です"})
+		UserErrors.Push(&InvalidUserEmailError{ID: u.ID, Original: u.Email, Cause: "フォーマットが不正です"})
 	}
 
 	// verify phone number format
 	if !regexPhoneNumber.MatchString(u.PhoneNumber) {
-		UserErrors.Push(&InvalidUserPhoneNumberError{id: u.ID, original: u.Email, cause: "フォーマットが不正です"})
+		UserErrors.Push(&InvalidUserPhoneNumberError{ID: u.ID, original: u.PhoneNumber, Cause: "フォーマットが不正です"})
 	}
 }

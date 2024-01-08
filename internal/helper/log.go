@@ -8,56 +8,60 @@ import (
 )
 
 // declare logger as global variable
-var logger *slog.Logger
+var Logger *slog.Logger
 
 // get logger with log/slog
-func GetNewLogger(ctx context.Context) (*slog.Logger, error) {
+func GetNewLogger(ctx context.Context) error {
 	var err error
+	var logType, logFile, logFormat string
 	// get config from ctx by key logType string
 	// logType are "file" or "stdout"
 	// logFormat are "json" or "text"
-	logType := GetLogType(ctx)
-	logFile := GetLogFile(ctx)
-	logFormat := GetLogFormat(ctx)
-
-	// return logger if logger is already exist
-	if logger != nil {
-		return logger, nil
+	logType = GetLogType(ctx)
+	if logType == "test" {
+		logFile = "stdout"
+		logFormat = "text"
+	} else {
+		logFile = GetLogFile(ctx)
+		logFormat = GetLogFormat(ctx)
 	}
 
 	switch logType {
+	case "test":
+		Logger = slog.New(slog.NewTextHandler(os.Stdout, nil))
+
 	case "file":
 		if logFile == "" {
-			return nil, fmt.Errorf("logFile is empty")
+			return fmt.Errorf("logFile is empty")
 		}
 
 		// create logger with file output
 		var file *os.File
 		if file, err = os.Open(logFile); nil != err {
-			return nil, err
+			return err
 		}
 
 		// if logFormat is json, create logger with json format
 		if logFormat == "json" {
-			logger = slog.New(slog.NewJSONHandler(file, nil))
+			Logger = slog.New(slog.NewJSONHandler(file, nil))
 		} else {
 			// if logFormat is text, create logger with text format
-			logger = slog.New(slog.NewTextHandler(file, nil))
+			Logger = slog.New(slog.NewTextHandler(file, nil))
 		}
 
 	case "stdout":
 		// create logger with stdout output
 		// if logFormat is json, create logger with json format
 		if logFormat == "json" {
-			logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
+			Logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
 		} else {
 			// if logFormat is text, create logger with text format
-			logger = slog.New(slog.NewTextHandler(os.Stdout, nil))
+			Logger = slog.New(slog.NewTextHandler(os.Stdout, nil))
 		}
 
 	default:
-		return nil, fmt.Errorf("logType is not supported")
+		return fmt.Errorf("logType(%s) is not supported", logType)
 	}
 
-	return logger, nil
+	return nil
 }

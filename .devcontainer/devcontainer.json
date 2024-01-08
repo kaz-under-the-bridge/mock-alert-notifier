@@ -1,0 +1,25 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/go
+{
+	"name": "Go",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/go:1-1.21-bullseye",
+	"remoteUser": "root",
+	"features": {
+		"ghcr.io/eitsupi/devcontainer-features/go-task:1": {}
+	},
+	// ホストマシンの.credentials ディレクトリをマウント
+	// 事前にspreadsheet にアクセスするための認証情報を格納する
+	// https://developers.google.com/sheets/api/guides/authorizing#OAuth2Authorizing
+	"mounts": [
+		"source=${localEnv:HOME}/.credentials,target=/root/.credentials,type=bind,consistency=cached"
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"golang.go",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	}
+}

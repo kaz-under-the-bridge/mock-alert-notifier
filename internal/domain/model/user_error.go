@@ -37,53 +37,71 @@ func (ues UserErrrors) Error() string {
 
 // IDはRepositoryでチェック（空白）しているので、ここではチェックしない
 //type InvalidUserIdError struct {
-//	id    int
-//	cause string
+//	ID   int
+//	Cause string
 //}
 
 type InvalidUserFamilyNameError struct {
-	id    int
-	cause string
+	ID    int
+	Cause string
 }
 
 type InvalidUserGivenNameError struct {
-	id    int
-	cause string
+	ID    int
+	Cause string
 }
 
 type InvalidUserOrganizationError struct {
-	id    int
-	cause string
+	ID    int
+	Cause string
 }
 
 type InvalidUserEmailError struct {
-	id       int
-	original string
-	cause    string
+	ID       int
+	Original string
+	Cause    string
 }
 
 type InvalidUserPhoneNumberError struct {
-	id       int
+	ID       int
 	original string
-	cause    string
+	Cause    string
 }
 
 func (e *InvalidUserFamilyNameError) Error() string {
-	return fmt.Sprintf("ID(%d)のFamilyNameが不正です: %s", e.id, e.cause)
+	return fmt.Sprintf("ID(%d)のFamilyNameが不正です: %s", e.ID, e.Cause)
 }
 
 func (e *InvalidUserGivenNameError) Error() string {
-	return fmt.Sprintf("ID(%d)のGivenName が不正です: %s", e.id, e.cause)
+	return fmt.Sprintf("ID(%d)のGivenName が不正です: %s", e.ID, e.Cause)
 }
 
 func (e *InvalidUserOrganizationError) Error() string {
-	return fmt.Sprintf("ID(%d)のOrganizationが不正です: %s", e.id, e.cause)
+	return fmt.Sprintf("ID(%d)のOrganizationが不正です: %s", e.ID, e.Cause)
 }
 
 func (e *InvalidUserEmailError) Error() string {
-	return fmt.Sprintf("ID(%d)のEmail(%s)が不正です: %s", e.id, e.original, e.cause)
+	return fmt.Sprintf("ID(%d)のEmail(%s)が不正です: %s", e.ID, e.Original, e.Cause)
 }
 
 func (e *InvalidUserPhoneNumberError) Error() string {
-	return fmt.Sprintf("ID(%d)のPhoneNumber(%s)が不正です: %s", e.id, e.original, e.cause)
+	return fmt.Sprintf("ID(%d)のPhoneNumber(%s)が不正です: %s", e.ID, e.original, e.Cause)
+}
+
+type UserNotFoundError struct {
+	ID    int
+	Email string
+}
+
+func (e *UserNotFoundError) Error() string {
+	switch {
+	case e.ID != 0 && e.Email != "":
+		return fmt.Sprintf("ID(%d) or Email(%s) is not found", e.ID, e.Email)
+	case e.ID != 0 && e.Email == "":
+		return fmt.Sprintf("ID(%d) is not found", e.ID)
+	case e.ID == 0 && e.Email != "":
+		return fmt.Sprintf("Email(%s) is not found", e.Email)
+	default:
+		return "User is not found, any identifier is not specified"
+	}
 }
