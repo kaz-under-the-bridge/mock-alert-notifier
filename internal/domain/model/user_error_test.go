@@ -9,14 +9,14 @@ import (
 
 func TestUserVeificationWithError(t *testing.T) {
 	_ = NewUser(1, "", "", "", "hoge", 1)
-	assert.NotEqual(t, 0, UserErrors.Len())
+	assert.NotEqual(t, 0, ObjUserErrors.Len())
 	want := `ID(1)のFamilyNameが不正です: 空白です
 ID(1)のGivenName が不正です: 空白です
 ID(1)のEmail()が不正です: 空白です
 ID(1)のEmail()が不正です: フォーマットが不正です
 ID(1)のPhoneNumber(hoge)が不正です: フォーマットが不正です
 `
-	assert.Equal(t, want, UserErrors.Error())
+	assert.Equal(t, want, ObjUserErrors.Error())
 }
 
 func TestUserEmailVerificationWithOK(t *testing.T) {
@@ -38,12 +38,12 @@ func TestUserEmailVerificationWithOK(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		UserErrors = NewUserErrrors()
+		ObjUserErrors = NewUserErrors() // ループの前のerrorをrefresh
 		_ = NewUser(tc.id, tc.familyName, tc.givenName, tc.email, tc.phoneNumber, tc.organizationID)
 
-		assert.Equal(t, tc.errorLength, UserErrors.Len())
-		if UserErrors.Len() != 0 {
-			assert.Equal(t, fmt.Sprintf("ID(%d)のEmail(%s)が不正です: フォーマットが不正です\n", tc.id, tc.email), UserErrors.Error())
+		assert.Equal(t, tc.errorLength, ObjUserErrors.Len())
+		if ObjUserErrors.Len() != 0 {
+			assert.Equal(t, fmt.Sprintf("ID(%d)のEmail(%s)が不正です: フォーマットが不正です\n", tc.id, tc.email), ObjUserErrors.Error())
 		}
 	}
 }
@@ -65,13 +65,13 @@ func TestUserPhoneNumberVerificationWithOK(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		UserErrors = NewUserErrrors()
+		ObjUserErrors = NewUserErrors() // ループの前のerrorをrefresh
 		_ = NewUser(tc.id, tc.familyName, tc.givenName, tc.email, tc.phoneNumber, tc.organizationID)
 
-		assert.Equal(t, tc.errorLength, UserErrors.Len())
-		if UserErrors.Len() != 0 {
-			fmt.Printf("sample: %s", UserErrors.Error())
-			assert.Equal(t, fmt.Sprintf("ID(%d)のPhoneNumber(%s)が不正です: フォーマットが不正です\n", tc.id, tc.phoneNumber), UserErrors.Error())
+		assert.Equal(t, tc.errorLength, ObjUserErrors.Len())
+		if ObjUserErrors.Len() != 0 {
+			fmt.Printf("sample: %s", ObjUserErrors.Error())
+			assert.Equal(t, fmt.Sprintf("ID(%d)のPhoneNumber(%s)が不正です: フォーマットが不正です\n", tc.id, tc.phoneNumber), ObjUserErrors.Error())
 		}
 	}
 }

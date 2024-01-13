@@ -2,8 +2,6 @@ package model
 
 import "regexp"
 
-type Users []*User
-
 // declare regex matcher for email
 // - @マークの前は英数字, ハイフン, ドット(.)を許可
 // - ドメインは英小文字、数字、ハイフンを許可(トップレベルドメインは英小文字のみ)
@@ -13,11 +11,13 @@ var regexEmail = regexp.MustCompile(`^[\w+\-.]+@[a-z\d\-.]+\.[a-z]+$`)
 // - xxxx-xxxx-xxxx(4桁, ハイフンあり)
 var regexPhoneNumber = regexp.MustCompile(`^\d{1,4}-\d{1,4}-\d{4}$`)
 
-var UserErrors *UserErrrors
+var ObjUserErrors *UserErrors
 
 func init() {
-	UserErrors = NewUserErrrors()
+	ObjUserErrors = NewUserErrors()
 }
+
+type Users []*User
 
 type User struct {
 	ID             int    `json:"id"`
@@ -120,24 +120,24 @@ func (us *Users) FindBySameOrganization(u *User) (*Users, bool) {
 func (u User) verify() {
 	// ID列（A列・D列
 	if u.FamilyName == "" {
-		UserErrors.Push(&InvalidUserFamilyNameError{ID: u.ID, Cause: "空白です"})
+		ObjUserErrors.Push(&InvalidUserFamilyNameError{ID: u.ID, Cause: "空白です"})
 	}
 
 	if u.GivenName == "" {
-		UserErrors.Push(&InvalidUserGivenNameError{ID: u.ID, Cause: "空白です"})
+		ObjUserErrors.Push(&InvalidUserGivenNameError{ID: u.ID, Cause: "空白です"})
 	}
 
 	if u.Email == "" {
-		UserErrors.Push(&InvalidUserEmailError{ID: u.ID, Cause: "空白です"})
+		ObjUserErrors.Push(&InvalidUserEmailError{ID: u.ID, Cause: "空白です"})
 	}
 
 	// verify email format
 	if !regexEmail.MatchString(u.Email) {
-		UserErrors.Push(&InvalidUserEmailError{ID: u.ID, Original: u.Email, Cause: "フォーマットが不正です"})
+		ObjUserErrors.Push(&InvalidUserEmailError{ID: u.ID, Original: u.Email, Cause: "フォーマットが不正です"})
 	}
 
 	// verify phone number format
 	if !regexPhoneNumber.MatchString(u.PhoneNumber) {
-		UserErrors.Push(&InvalidUserPhoneNumberError{ID: u.ID, original: u.PhoneNumber, Cause: "フォーマットが不正です"})
+		ObjUserErrors.Push(&InvalidUserPhoneNumberError{ID: u.ID, original: u.PhoneNumber, Cause: "フォーマットが不正です"})
 	}
 }

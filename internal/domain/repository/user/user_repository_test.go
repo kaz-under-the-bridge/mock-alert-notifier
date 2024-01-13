@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/helper"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/infrastracture/spreadsheet"
 	"github.com/stretchr/testify/assert"
 )
@@ -18,6 +19,14 @@ func (m *MockSpreadsheetDatastore) Values(ctx context.Context, spreadsheetId, re
 			{1, "test_family_name", "test_given_name", "test_email", "test_phone_number", 1},
 		},
 	}, nil
+}
+
+func TestMain(m *testing.M) {
+	if err := helper.GetNewLogger(helper.SetLogType(context.Background(), "test")); err != nil {
+		panic(err)
+	}
+
+	m.Run()
 }
 
 func TestUserRepository_GetUsers(t *testing.T) {
