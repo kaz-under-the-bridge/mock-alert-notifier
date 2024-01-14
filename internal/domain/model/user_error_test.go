@@ -38,7 +38,7 @@ func TestUserEmailVerificationWithOK(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		ObjUserErrors = NewUserErrors() // ループの前のerrorをrefresh
+		ObjUserErrors = NewUserErrors() // ループの前にerrorをrefresh
 		_ = NewUser(tc.id, tc.familyName, tc.givenName, tc.email, tc.phoneNumber, tc.organizationID)
 
 		assert.Equal(t, tc.errorLength, ObjUserErrors.Len())

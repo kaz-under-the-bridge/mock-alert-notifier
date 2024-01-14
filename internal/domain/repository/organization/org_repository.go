@@ -1,4 +1,4 @@
-package user
+package organization
 
 import (
 	"context"
@@ -14,14 +14,14 @@ import (
 
 const (
 	spreadsheetId = "1fvHpjp1MgLDqPlo9WIfMhssuE9KUU05hCT3-Aln-D3Q"
-	readRange     = "UserMaster!A3:G990" // ここを変更するときはvalidateRowDataのoffset値も変更すること
+	readRange     = "OrganizationMaster!A3:G990" // ここを変更するときはvalidateRowDataのoffset値も変更すること
 )
 
 // ThreadUnsafeな挙動になるのでgoroutineなどで並列処理を行う場合は注意
-var sharedUsers *model.Users
+var sharedOrganizations *model.Organizations
 
 type RepositoryInterface interface {
-	GetUsers() (*model.Users, error)
+	GetOrganizations() (*model.Organizations, error)
 }
 
 type Repository struct {
@@ -29,7 +29,7 @@ type Repository struct {
 	ds  spreadsheet.SpreadsheetDatastoreInterface
 }
 
-func NewUserRepository(ctx context.Context, ds spreadsheet.SpreadsheetDatastoreInterface) *Repository {
+func NewOrganizationRepository(ctx context.Context, ds spreadsheet.SpreadsheetDatastoreInterface) *Repository {
 	return &Repository{
 		ctx: ctx,
 		ds:  ds,
@@ -58,48 +58,38 @@ func validateRowDataType(rowIndex int, data []interface{}) error {
 			return errors.Wrapf(invalidDataError, "Cell: %s", cell)
 		}
 	}
-
-	if _, ok := data[5].(int); !ok {
-		cell := fmt.Sprintf("%s%d", col[colOffset+5], rowIndex+rowOffset)
-		helper.Logger.Error("field should be Integer", slog.String("Cell", cell), slog.String("Value", fmt.Sprintf("%v", data)))
-		return errors.Wrapf(invalidDataError, "Cell: %s", cell)
-	}
-
-	// ToDo: `#N/A` のセルがあったらスキップする機構もいずれ必要
-
 	return nil
 }
 
-func (r Repository) getUsersFromSpreadsheet() (*model.Users, error) {
+func (r Repository) getOrganizationsFromSpreadsheet() (*model.Organizations, error) {
 	resp, err := r.ds.Values(r.ctx, spreadsheetId, readRange)
 	if err != nil {
 		helper.Logger.Error("spreadsheet service values got error", slog.String("SheetID", spreadsheetId), slog.String("ReadRange", readRange))
 		return nil, err
 	}
-	var users model.Users
-	for r, row := range resp.Values {
-		if err := validateRowDataType(r, row); err != nil {
+
+	var orgs model.Organizations
+	for i, row := range resp.Values {
+		if err := validateRowDataType(i, row); err != nil {
 			return nil, err
 		}
 
-		user := model.NewUser(
+		org := model.NewOrganization(
 			row[0].(int),
 			row[1].(string),
 			row[2].(string),
 			row[3].(string),
 			row[4].(string),
-			row[5].(int),
 		)
-		users.Push(user)
+		orgs.Push(org)
 	}
-	sharedUsers = &users
-	return &users, nil
+	sharedOrganizations = &orgs
+	return &orgs, nil
 }
 
-func (r *Repository) GetUsers() (*model.Users, error) {
-	if sharedUsers != nil {
-		return sharedUsers, nil
+func (r Repository) GetOrganizations() (*model.Organizations, error) {
+	if sharedOrganizations != nil {
+		return sharedOrganizations, nil
 	}
-
-	return r.getUsersFromSpreadsheet()
+	return r.getOrganizationsFromSpreadsheet()
 }
