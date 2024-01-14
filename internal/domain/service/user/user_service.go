@@ -10,6 +10,7 @@ import (
 var _ ServiceInterface = (*Service)(nil)
 
 type ServiceInterface interface {
+	FindByEmail(email string) (*model.User, error)
 }
 
 type Service struct {
