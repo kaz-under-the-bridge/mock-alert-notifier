@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	spreadsheetId = "xxxxx"
+	spreadsheetId = "1fvHpjp1MgLDqPlo9WIfMhssuE9KUU05hCT3-Aln-D3Q"
 	readRange     = "UserMaster!A3:G990" // ここを変更するときはvalidateRowDataのoffset値も変更すること
 )
 
@@ -64,6 +64,8 @@ func validateRowDataType(rowIndex int, data []interface{}) error {
 		helper.Logger.Error("field should be Integer", slog.String("Cell", cell), slog.String("Value", fmt.Sprintf("%v", data)))
 		return errors.Wrapf(invalidDataError, "Cell: %s", cell)
 	}
+
+	// ToDo: `#N/A` のセルがあったらスキップする機構もいずれ必要
 
 	return nil
 }
