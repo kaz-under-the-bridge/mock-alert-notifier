@@ -2,21 +2,21 @@ package model
 
 import "fmt"
 
-type UserErrrors []error
+type UserErrors []error
 
-func NewUserErrrors() *UserErrrors {
-	return &UserErrrors{}
+func NewUserErrors() *UserErrors {
+	return &UserErrors{}
 }
 
-func GetUserErrors() *UserErrrors {
-	return UserErrors
+func GetUserErrors() *UserErrors {
+	return ObjUserErrors
 }
 
-func (ues *UserErrrors) Push(err error) {
+func (ues *UserErrors) Push(err error) {
 	*ues = append(*ues, err)
 }
 
-func (ues UserErrrors) Len() int {
+func (ues UserErrors) Len() int {
 	cnt := 0
 
 	for range ues {
@@ -26,7 +26,7 @@ func (ues UserErrrors) Len() int {
 }
 
 // print all UserErrrors as string
-func (ues UserErrrors) Error() string {
+func (ues UserErrors) Error() string {
 	var errString string
 
 	for _, err := range ues {

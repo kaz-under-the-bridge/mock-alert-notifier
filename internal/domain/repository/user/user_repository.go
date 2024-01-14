@@ -17,12 +17,6 @@ const (
 	readRange     = "UserMaster!A3:G990" // ここを変更するときはvalidateRowDataのoffset値も変更すること
 )
 
-func init() {
-	if err := helper.GetNewLogger(helper.SetLogType(context.Background(), "test")); err != nil {
-		panic(err)
-	}
-}
-
 // ThreadUnsafeな挙動になるのでgoroutineなどで並列処理を行う場合は注意
 var sharedUsers *model.Users
 

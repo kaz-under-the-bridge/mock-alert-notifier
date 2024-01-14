@@ -34,11 +34,11 @@ tasks:
     dir: .
     cmds:
       - task: install_gotest
-      - gotest {{.APPNAME_FULL}}/...
+      - $GOPATH/bin/gotest {{.APPNAME_FULL}}/...
 
   test-with-run:
     desc: "go test for specific packages(-- testpkg)"
     dir: .
     cmds:
       - task: install_gotest
-      - gotest {{.APPNAME_FULL}}/... -run {{.CLI_ARGS}}
+      - $GOPATH/bin/gotest {{.APPNAME_FULL}}/... -run {{.CLI_ARGS}}
