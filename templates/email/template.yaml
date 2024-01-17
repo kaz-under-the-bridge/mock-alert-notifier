@@ -1,0 +1,10 @@
+- name: first step guid
+  subject: こんにちは
+  body: |
+    {{ Organization.Name }} {{ Organization.TeamName }}, {{ User.Name }} 様
+
+    お世話になっております。
+
+    〜〜〜〜〜〜〜
+
+    以上、よろしくお願いいたします。
