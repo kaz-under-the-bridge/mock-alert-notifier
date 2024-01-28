@@ -1,4 +1,4 @@
-package model
+package sms
 
 import "time"
 

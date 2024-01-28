@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model"
+	model_email "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/email"
 	repo_email "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/repository/email"
 	infra_email "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/infrastracture/email"
 	"github.com/stretchr/testify/assert"
@@ -15,7 +15,7 @@ func TestEmailSend(t *testing.T) {
 	client := infra_email.NewExportMockEmailClient()
 	repo := repo_email.NewEmailRepository(ctx, client)
 
-	email := model.Email{}
+	email := model_email.Email{}
 
 	err := repo.Send(&email)
 

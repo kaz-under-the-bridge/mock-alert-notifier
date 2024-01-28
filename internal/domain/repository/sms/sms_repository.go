@@ -3,12 +3,12 @@ package sms
 import (
 	"context"
 
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model"
+	model_sms "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/sms"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/infrastracture/sms"
 )
 
 type RepositoryInterface interface {
-	Send(email *model.SMSMessage) error
+	Send(email *model_sms.SMSMessage) error
 }
 
 type Repository struct {
@@ -23,7 +23,7 @@ func NewSMSRepository(ctx context.Context, client sms.SMSClientInterface) *Repos
 	}
 }
 
-func (r *Repository) Send(sms *model.SMSMessage) error {
+func (r *Repository) Send(sms *model_sms.SMSMessage) error {
 	err := r.client.Send(sms)
 	if err != nil {
 		return err

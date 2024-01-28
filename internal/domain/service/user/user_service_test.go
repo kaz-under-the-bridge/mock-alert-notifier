@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model"
+	model_user "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/user"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/helper"
 	"github.com/stretchr/testify/assert"
 )
 
-func GenerateDummyUsers() []*model.User {
-	return []*model.User{
+func GenerateDummyUsers() []*model_user.User {
+	return []*model_user.User{
 		{
 			ID:             1,
 			FamilyName:     "テスト",
@@ -40,8 +40,8 @@ func GenerateDummyUsers() []*model.User {
 
 type MockUserRepository struct{}
 
-func (m *MockUserRepository) GetUsers() (*model.Users, error) {
-	users := &model.Users{}
+func (m *MockUserRepository) GetUsers() (*model_user.Users, error) {
+	users := &model_user.Users{}
 
 	dummyUsers := GenerateDummyUsers()
 
@@ -103,7 +103,7 @@ func TestUserService_FindByEmail(t *testing.T) {
 
 		if tc.isErr {
 			assert.Error(t, err)
-			assert.Equal(t, &model.UserNotFoundError{Email: tc.email}, err)
+			assert.Equal(t, &model_user.UserNotFoundError{Email: tc.email}, err)
 		} else {
 			assert.NoError(t, err)
 			assert.Equal(t, tc.wantID, user.ID)

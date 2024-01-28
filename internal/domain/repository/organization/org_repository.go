@@ -7,7 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model"
+	model_org "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/org"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/helper"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/infrastracture/spreadsheet"
 )
@@ -18,10 +18,10 @@ const (
 )
 
 // ThreadUnsafeな挙動になるのでgoroutineなどで並列処理を行う場合は注意
-var sharedOrganizations *model.Organizations
+var sharedOrganizations *model_org.Organizations
 
 type RepositoryInterface interface {
-	GetOrganizations() (*model.Organizations, error)
+	GetOrganizations() (*model_org.Organizations, error)
 }
 
 type Repository struct {
@@ -61,20 +61,20 @@ func validateRowDataType(rowIndex int, data []interface{}) error {
 	return nil
 }
 
-func (r Repository) getOrganizationsFromSpreadsheet() (*model.Organizations, error) {
+func (r Repository) getOrganizationsFromSpreadsheet() (*model_org.Organizations, error) {
 	resp, err := r.ds.Values(r.ctx, spreadsheetId, readRange)
 	if err != nil {
 		helper.Logger.Error("spreadsheet service values got error", slog.String("SheetID", spreadsheetId), slog.String("ReadRange", readRange))
 		return nil, err
 	}
 
-	var orgs model.Organizations
+	var orgs model_org.Organizations
 	for i, row := range resp.Values {
 		if err := validateRowDataType(i, row); err != nil {
 			return nil, err
 		}
 
-		org := model.NewOrganization(
+		org := model_org.NewOrganization(
 			row[0].(int),
 			row[1].(string),
 			row[2].(string),
@@ -87,7 +87,7 @@ func (r Repository) getOrganizationsFromSpreadsheet() (*model.Organizations, err
 	return &orgs, nil
 }
 
-func (r Repository) GetOrganizations() (*model.Organizations, error) {
+func (r Repository) GetOrganizations() (*model_org.Organizations, error) {
 	if sharedOrganizations != nil {
 		return sharedOrganizations, nil
 	}

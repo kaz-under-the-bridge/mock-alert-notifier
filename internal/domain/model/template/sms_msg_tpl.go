@@ -1,4 +1,4 @@
-package model
+package message_tpl
 
 import "github.com/pkg/errors"
 

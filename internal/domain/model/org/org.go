@@ -1,4 +1,15 @@
-package model
+package org
+
+import "regexp"
+
+// declare regex matcher for email
+// - @マークの前は英数字, ハイフン, ドット(.)を許可
+// - ドメインは英小文字、数字、ハイフンを許可(トップレベルドメインは英小文字のみ)
+var regexEmail = regexp.MustCompile(`^[\w+\-.]+@[a-z\d\-.]+\.[a-z]+$`)
+
+// declare regex matcher for phone number
+// - xxxx-xxxx-xxxx(4桁, ハイフンあり)
+var regexPhoneNumber = regexp.MustCompile(`^\d{1,4}-\d{1,4}-\d{4}$`)
 
 var ObjOrganizationErrors *OrganizationErrors
 

@@ -1,3 +1,3 @@
-package model
+package email
 
 // ToDo: あとで実装
