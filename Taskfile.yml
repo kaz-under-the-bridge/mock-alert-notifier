@@ -42,3 +42,9 @@ tasks:
     cmds:
       - task: install_gotest
       - $GOPATH/bin/gotest {{.APPNAME_FULL}}/... -run {{.CLI_ARGS}}
+
+  test-on-runner:
+    desc: "go test on actions runner"
+    dir: .
+    cmds:
+      - go test -v {{.APPNAME_FULL}}/...

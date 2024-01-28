@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -46,26 +45,3 @@ func (es *Emails) Len() int {
 	}
 	return cnt
 }
-
-type InvalidEmailAddressError struct {
-	Email string
-}
-
-type InvalidEmailBodyError struct {
-}
-
-func (e *InvalidEmailAddressError) Error() string {
-	return fmt.Sprintf("EmailAddress(%s)のフォーマットが不正です", e.Email)
-}
-
-func (e *InvalidEmailBodyError) Error() string {
-	return "EmailBodyが指定されていません"
-}
-
-//func (e Email) verify() {
-//	// veirfy body is not empty
-//
-//	// verify fromAddress is not empty
-//
-//	// verify toAddresses is not empty
-//}
