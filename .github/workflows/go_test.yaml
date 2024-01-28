@@ -1,0 +1,21 @@
+name: Go Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+      - name: Install Taskfile
+        run: |
+          curl -fsSL https://taskfile.dev/install.sh | sh
+      - name: Run tests
+        run: task test

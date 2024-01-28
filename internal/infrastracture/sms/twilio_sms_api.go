@@ -32,14 +32,14 @@ func NewTwilioSMSClient(ctx context.Context) SMSClientInterface {
 }
 
 func (e *TwilioSMSClient) Send(SMS *model.SMSMessage) error {
-	if err := sendSMSBySendgrid(SMS, e.ctx); err != nil {
+	if err := sendSMSByTwilioAPI(SMS, e.ctx); err != nil {
 		return err
 	}
 	e.updateSentAt(SMS)
 	return nil
 }
 
-func sendSMSBySendgrid(SMS *model.SMSMessage, ctx context.Context) error {
+func sendSMSByTwilioAPI(SMS *model.SMSMessage, ctx context.Context) error {
 	// ToDo: あとで実装
 
 	return nil
