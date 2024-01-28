@@ -18,4 +18,4 @@ jobs:
         run: |
           curl -fsSL https://taskfile.dev/install.sh | sh
       - name: Run tests
-        run: task test
+        run: /usr/bin/task test
