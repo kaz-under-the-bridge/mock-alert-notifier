@@ -14,8 +14,10 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.21
-      - name: Install Taskfile
-        run: |
-          curl -fsSL https://taskfile.dev/install.sh | sh
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run tests
-        run: /usr/bin/task test
+        run: task test
