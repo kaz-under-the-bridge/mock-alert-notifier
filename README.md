@@ -1,7 +1,7 @@
 # mock-alert-notifier
 Go・クラウドソリューションに対する周辺知識やポートフォリオの棚卸し＆練習のためのリポジトリ  
 
-[![Go Test](https://github.com/kaz-under-the-bridge/mock-alert-notifier/blob/main/.github/workflows/go_test.yaml/badge.svg)](https://github.com/kaz-under-the-bridge/mock-alert-notifier/blob/main/.github/workflows/go_test.yaml)
+[![Go Test](https://github.com/kaz-under-the-bridge/mock-alert-notifier/actions/workflows/go_test.yaml/badge.svg)](https://github.com/kaz-under-the-bridge/mock-alert-notifier/actions/workflows/go_test.yaml)
 
 ## メモ
 - 2024/1/上旬時点ではまだWIPです。
