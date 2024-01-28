@@ -1,6 +1,8 @@
 # mock-alert-notifier
 Go・クラウドソリューションに対する周辺知識やポートフォリオの棚卸し＆練習のためのリポジトリ  
 
+[![Go Test](https://github.com/kaz-under-the-bridge/mock-alert-notifier/actions/workflows/go_test.yaml/badge.svg)](https://github.com/kaz-under-the-bridge/mock-alert-notifier/actions/workflows/go_test.yaml)
+
 ## メモ
 - 2024/1/上旬時点ではまだWIPです。
   - 進捗は後述のタスクリスト参照
@@ -16,16 +18,16 @@ Go・クラウドソリューションに対する周辺知識やポートフォ
     - with Redis side-car Container
   - Terraform
 - タスクリスト
-  - [ ] コード実装 - mockレベル（2024/1上旬）
-    - [ ] ユーザーまわり
-    - [ ] メールまわり・テンプレートエンジン
-    - [ ] 電話発信まわり・コールバックサーバ
-    - [ ] SMS送信まわり・テンプレートエンジン
-  - [ ] Twilio APIの単体実装＆テスト（2024/1中旬）
-  - [ ] AWS/GCPのterraform初期コード (2024/1下旬)
-    - [ ] GitHub Actions CI/CD化
-    - [ ] Amazon Pollyを触ってみる
-    - [ ] CloudRunデプロイフロー
+  - [x] コード実装 - mockレベル（2024/1上旬）
+    - [x] ユーザーまわり
+    - [x] メールまわり・テンプレートエンジン
+    - [x] 電話発信まわり・コールバックサーバ
+    - [x] SMS送信まわり・テンプレートエンジン
+  - [x] Twilio APIの単体実装＆テスト（2024/1中旬）
+  - [x] AWS/GCPのterraform初期コード (2024/1下旬)
+    - [x] GitHub Actions CI/CD化(Go Test)
+    - [x] Amazon Pollyを触ってみる
+    - [ ] CloudRunデプロイフロー(あとまわし)
   - [ ] クラウドサービスも含めたコード最終化（2024/2上旬）
   - [ ] ブラッシュアップ（2024/2月中〜下旬）
 
