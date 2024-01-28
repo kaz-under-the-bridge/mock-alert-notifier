@@ -2,7 +2,6 @@ package model
 
 import "github.com/pkg/errors"
 
-// fefine EmailMessageTemplate
 // MessageTemplate is embedded in EmailMessageTemplate
 
 type EmailMessageTemplates []*EmailMessageTemplate
