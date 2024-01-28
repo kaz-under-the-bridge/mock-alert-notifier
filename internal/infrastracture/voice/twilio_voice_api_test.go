@@ -12,6 +12,11 @@ import (
 func TestTwilioCall(t *testing.T) {
 	to := os.Getenv("PHONE_NUMBER")
 
+	if to == "" {
+		t.Log("PHONE_NUMBER is not set")
+		t.Skip()
+	}
+
 	client := twilio.NewRestClient()
 
 	params := &api.CreateCallParams{}

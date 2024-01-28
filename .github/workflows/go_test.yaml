@@ -20,4 +20,4 @@ jobs:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run tests
-        run: task test
+        run: task test-on-runner
