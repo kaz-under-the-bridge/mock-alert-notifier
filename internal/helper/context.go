@@ -9,6 +9,7 @@ const (
 	logTypeKey   contextKey = "logType"
 	logFileKey   contextKey = "logFile"
 	logFormatKey contextKey = "logFormat"
+	sendgridKey  contextKey = "sendgridKey"
 )
 
 // setter and gettter for context value
@@ -47,4 +48,13 @@ func SetLogFormat(ctx context.Context, logFormat string) context.Context {
 
 func GetLogFormat(ctx context.Context) string {
 	return ctx.Value(logFormatKey).(string)
+}
+
+// for sendgridKey
+func SetSendgridKey(ctx context.Context, key string) context.Context {
+	return context.WithValue(ctx, sendgridKey, key)
+}
+
+func GetSendgridKey(ctx context.Context) string {
+	return ctx.Value(sendgridKey).(string)
 }
