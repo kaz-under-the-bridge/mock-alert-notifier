@@ -7,7 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model"
+	model_user "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/user"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/helper"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/infrastracture/spreadsheet"
 )
@@ -18,10 +18,10 @@ const (
 )
 
 // ThreadUnsafeな挙動になるのでgoroutineなどで並列処理を行う場合は注意
-var sharedUsers *model.Users
+var sharedUsers *model_user.Users
 
 type RepositoryInterface interface {
-	GetUsers() (*model.Users, error)
+	GetUsers() (*model_user.Users, error)
 }
 
 type Repository struct {
@@ -70,19 +70,19 @@ func validateRowDataType(rowIndex int, data []interface{}) error {
 	return nil
 }
 
-func (r Repository) getUsersFromSpreadsheet() (*model.Users, error) {
+func (r Repository) getUsersFromSpreadsheet() (*model_user.Users, error) {
 	resp, err := r.ds.Values(r.ctx, spreadsheetId, readRange)
 	if err != nil {
 		helper.Logger.Error("spreadsheet service values got error", slog.String("SheetID", spreadsheetId), slog.String("ReadRange", readRange))
 		return nil, err
 	}
-	var users model.Users
+	var users model_user.Users
 	for r, row := range resp.Values {
 		if err := validateRowDataType(r, row); err != nil {
 			return nil, err
 		}
 
-		user := model.NewUser(
+		user := model_user.NewUser(
 			row[0].(int),
 			row[1].(string),
 			row[2].(string),
@@ -96,7 +96,7 @@ func (r Repository) getUsersFromSpreadsheet() (*model.Users, error) {
 	return &users, nil
 }
 
-func (r *Repository) GetUsers() (*model.Users, error) {
+func (r *Repository) GetUsers() (*model_user.Users, error) {
 	if sharedUsers != nil {
 		return sharedUsers, nil
 	}

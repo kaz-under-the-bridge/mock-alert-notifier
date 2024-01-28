@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model"
+	model_email "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/email"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/helper"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 type EmailClientInterface interface {
-	Send(email *model.Email) error
+	Send(email *model_email.Email) error
 }
 
 type TwilioEmailClient struct {
@@ -23,7 +23,7 @@ type TwilioEmailClient struct {
 
 //type OtherServiceEmailClient struct {
 //}
-//func (e *OtherServiceEmailClient) Send(email model.Email) error {
+//func (e *OtherServiceEmailClient) Send(email model_email.Email) error {
 //	return nil
 //}
 //func NewOtherServiceEmailClient(ctx context.Context) EmailClientInterface {
@@ -37,7 +37,7 @@ func NewTwilioEmailClient(ctx context.Context) EmailClientInterface {
 	}
 }
 
-func (e *TwilioEmailClient) Send(email *model.Email) error {
+func (e *TwilioEmailClient) Send(email *model_email.Email) error {
 	if err := sendEmailBySendgrid(email, e.ctx); err != nil {
 		return err
 	}
@@ -45,7 +45,7 @@ func (e *TwilioEmailClient) Send(email *model.Email) error {
 	return nil
 }
 
-func sendEmailBySendgrid(email *model.Email, ctx context.Context) error {
+func sendEmailBySendgrid(email *model_email.Email, ctx context.Context) error {
 	_ = fmt.Sprintf("%s", email.CcAddresses)
 	_ = fmt.Sprintf("%s", email.BccAddresses)
 

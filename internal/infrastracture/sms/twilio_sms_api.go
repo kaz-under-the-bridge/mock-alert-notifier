@@ -3,11 +3,11 @@ package sms
 import (
 	"context"
 
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model"
+	model_sms "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/sms"
 )
 
 type SMSClientInterface interface {
-	Send(SMS *model.SMSMessage) error
+	Send(SMS *model_sms.SMSMessage) error
 }
 
 type TwilioSMSClient struct {
@@ -31,7 +31,7 @@ func NewTwilioSMSClient(ctx context.Context) SMSClientInterface {
 	}
 }
 
-func (e *TwilioSMSClient) Send(SMS *model.SMSMessage) error {
+func (e *TwilioSMSClient) Send(SMS *model_sms.SMSMessage) error {
 	if err := sendSMSByTwilioAPI(SMS, e.ctx); err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func (e *TwilioSMSClient) Send(SMS *model.SMSMessage) error {
 	return nil
 }
 
-func sendSMSByTwilioAPI(SMS *model.SMSMessage, ctx context.Context) error {
+func sendSMSByTwilioAPI(SMS *model_sms.SMSMessage, ctx context.Context) error {
 	// ToDo: あとで実装
 
 	return nil

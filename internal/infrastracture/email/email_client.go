@@ -3,13 +3,13 @@ package email
 import (
 	"time"
 
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model"
+	model_email "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/email"
 )
 
 // verifyなどの共通の処理を書く
 type EmailClient struct{}
 
-func (c *EmailClient) updateSentAt(email *model.Email) error {
+func (c *EmailClient) updateSentAt(email *model_email.Email) error {
 	now := time.Now()
 	email.SentAt = &now
 
@@ -26,7 +26,7 @@ func NewExportMockEmailClient() EmailClientInterface {
 	}
 }
 
-func (c *MockEmailClient) Send(email *model.Email) error {
+func (c *MockEmailClient) Send(email *model_email.Email) error {
 	c.updateSentAt(email)
 	return nil
 }
