@@ -14,11 +14,13 @@ func init() {
 type Emails []*Email
 
 type Email struct {
-	Subject     string
-	Body        string
-	FromAddress string
-	ToAddresses []string
-	SentAt      *time.Time
+	Subject      string
+	Body         string
+	FromAddress  string
+	ToAddresses  []string
+	CcAddresses  []string
+	BccAddresses []string
+	SentAt       *time.Time
 }
 
 func NewEmail(body string, fromAddress string, toAddresses []string) (*Email, error) {
@@ -60,10 +62,10 @@ func (e *InvalidEmailBodyError) Error() string {
 	return "EmailBodyが指定されていません"
 }
 
-func (e Email) verify() {
-	// veirfy body is not empty
-
-	// verify fromAddress is not empty
-
-	// verify toAddresses is not empty
-}
+//func (e Email) verify() {
+//	// veirfy body is not empty
+//
+//	// verify fromAddress is not empty
+//
+//	// verify toAddresses is not empty
+//}
