@@ -1,6 +1,9 @@
 package org
 
-import "regexp"
+import (
+	"reflect"
+	"regexp"
+)
 
 // declare regex matcher for email
 // - @マークの前は英数字, ハイフン, ドット(.)を許可
@@ -41,14 +44,6 @@ func NewOrganization(
 	o.verify()
 
 	return o
-}
-
-func (os *Organizations) ToMap() map[int]*Organization {
-	m := make(map[int]*Organization)
-	for _, o := range *os {
-		m[o.ID] = o
-	}
-	return m
 }
 
 func (os *Organizations) ToSlice() []*Organization {
@@ -143,4 +138,25 @@ func (o *Organization) verify() {
 	if !regexPhoneNumber.MatchString(o.PhoneNumber) {
 		ObjOrganizationErrors.Push(&InvalidOrganizationPhoneNumberError{ID: o.ID, Original: o.PhoneNumber, Cause: "フォーマットが不正です"})
 	}
+}
+
+// string型のフィールド名と値をmap[string]stringで返す
+func (o Organization) ToMap() map[string]string {
+	data := map[string]string{}
+
+	v := reflect.ValueOf(o)
+	t := v.Type()
+
+	for i := 0; i < v.NumField(); i++ {
+		if v.Field(i).Type().Name() != "string" {
+			continue
+		}
+
+		data[t.Field(i).Name] = v.Field(i).String()
+		//fmt.Println(t.Field(i).Name) -> 構造体のフィールド名
+		//fmt.Println(v.Field(i).Type().Name()) -> 構造体のフィールドの型名(string, int...)
+		//fmt.Println(v.Field(i).Interface()) -> 構造体のフィールドの値
+	}
+
+	return data
 }
