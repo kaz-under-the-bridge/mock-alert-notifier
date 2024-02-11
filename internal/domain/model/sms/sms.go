@@ -104,6 +104,15 @@ func (msg *SMSMessage) verify() {
 			Cause: "本文(body)が空白です",
 		})
 	}
+
+	bodyLen := countBodyMessageLength(msg.body)
+	if bodyLen > 1530 {
+		ObjSMSErrors.Push(&InvalidSMSBodyLengthError{
+			Body:   msg.body,
+			Length: bodyLen,
+		})
+	}
+
 }
 
 func (msg SMSMessage) GetBody() string {
@@ -126,4 +135,44 @@ func (msg *SMSMessage) UpdateSentAt() {
 func (msg SMSMessage) GetSentAtJSTFormatRFC3339() string {
 	timeAtJST := msg.sentAt.In(time.FixedZone("Asia/Tokyo", 9*60*60))
 	return timeAtJST.Format(time.RFC3339)
+}
+
+func countBodyMessageLength(body string) int {
+	var cnt int
+	var hankakuCnt int
+	var zenkakuCnt int
+
+	// 以下のコード区分では以下が半角としてカウントされる
+	// 個別に細かく指定してもいいが、あまり多用される文字列ではなく誤差が小さいのでざっくり算出とする
+	/*
+			句読点
+		。（句点）
+		、（読点）
+		．（中点）
+		？
+		！
+		記号
+		々（重ね点）
+		〜（波ダッシュ）
+		‖（縦線）
+		¥（円記号）
+		§（節記号）
+		¶（段落記号）
+		その他
+		ー（長音符） *空格（半角スペース）
+	*/
+	for _, c := range body {
+		if c >= '\u3040' && c <= '\u309F' ||
+			c >= '\u30A0' && c <= '\u30FF' ||
+			c >= '\u4E00' && c <= '\u9FFF' {
+			zenkakuCnt++
+		} else {
+			//fmt.Printf("%c\n", c)
+			hankakuCnt++
+		}
+	}
+
+	cnt = zenkakuCnt*2 + hankakuCnt
+
+	return cnt
 }

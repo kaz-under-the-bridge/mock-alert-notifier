@@ -22,15 +22,6 @@ type TwilioSMSClient struct {
 	*SMSClient
 }
 
-//type OtherServiceSMSClient struct {
-//}
-//func (e *OtherServiceSMSClient) Send(SMS model.SMS) error {
-//	return nil
-//}
-//func NewOtherServiceSMSClient(ctx context.Context) SMSClientInterface {
-//	return &OtherServiceSMSClient{}
-//}
-
 func NewTwilioSMSClient(ctx context.Context) SMSClientInterface {
 	return &TwilioSMSClient{
 		ctx:       ctx,

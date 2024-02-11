@@ -40,6 +40,17 @@ type InvalidSMSAttributeError struct {
 	Cause string
 }
 
+type InvalidSMSBodyLengthError struct {
+	Body   string
+	Length int
+}
+
 func (e *InvalidSMSAttributeError) Error() string {
 	return fmt.Sprintf("from: %s, to: %s のSMSで正しくないフィールドが存在します: %s", e.From, e.To, e.Cause)
+}
+
+// bodyの長さが半角換算で1530文字以上の場合エラーにする
+// Bodyの頭30文字を表示する
+func (e *InvalidSMSBodyLengthError) Error() string {
+	return fmt.Sprintf("SMSの本文が長すぎます(全角2文字, 半角1文字換算で1530文字以内必須): %s...(%d文字)", e.Body[:30], e.Length)
 }
