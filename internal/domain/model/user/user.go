@@ -1,6 +1,9 @@
 package user
 
-import "regexp"
+import (
+	"reflect"
+	"regexp"
+)
 
 // declare regex matcher for email
 // - @マークの前は英数字, ハイフン, ドット(.)を許可
@@ -140,4 +143,20 @@ func (u User) verify() {
 	if !regexPhoneNumber.MatchString(u.PhoneNumber) {
 		ObjUserErrors.Push(&InvalidUserPhoneNumberError{ID: u.ID, original: u.PhoneNumber, Cause: "フォーマットが不正です"})
 	}
+}
+
+// string fieldのみをmapに変換する
+func (u User) ToMap() map[string]string {
+	data := map[string]string{}
+
+	v := reflect.ValueOf(u)
+	t := v.Type()
+
+	for i := 0; i < v.NumField(); i++ {
+		if t.Field(i).Type.Kind() == reflect.String {
+			data[t.Field(i).Name] = v.Field(i).String()
+		}
+	}
+
+	return data
 }
