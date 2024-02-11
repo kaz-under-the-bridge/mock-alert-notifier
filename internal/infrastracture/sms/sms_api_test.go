@@ -1,37 +1,48 @@
 package sms
 
 import (
-	"fmt"
+	"context"
 	"os"
 	"testing"
 
-	"github.com/twilio/twilio-go"
-	api "github.com/twilio/twilio-go/rest/api/v2010"
+	model_sms "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/sms"
+	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/helper"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestSendSMS(t *testing.T) {
-	// Find your Account SID and Auth Token at twilio.com/console
-	// and set the environment variables. See http://twil.io/secure
-	client := twilio.NewRestClient()
-	to := os.Getenv("PHONE_NUMBER")
+func TestMain(m *testing.M) {
+	if err := helper.GetNewLogger(helper.SetLogType(context.Background(), "test")); err != nil {
+		panic(err)
+	}
 
-	params := &api.CreateMessageParams{}
-	params.SetBody("テストメッセージです by Twilio API")
+	m.Run()
+}
+
+// MockではなくてAPIじかたたきのテスト（実際にSMSが送信される）
+// このテストは環境変数TEST_TWILIO_TO_PHONE_NUMBERが設定されている場合のみ実行
+func TestSendSMSSendFunctionActually(t *testing.T) {
+	ctx := context.Background()
+	to := os.Getenv("TEST_TWILIO_TO_PHONENUMBER")
+
 	if to == "" {
-		t.Log("環境変数PHONE_NUMBERが設定されていません. skipします.")
+		t.Log("環境変数TEST_TWILIO_TO_PHONE_NUMBERが設定されていません. skipします.")
 		t.Skip()
 	}
-	params.SetFrom("+12019490946")
-	params.SetTo(to)
 
-	resp, err := client.Api.CreateMessage(params)
-	if err != nil {
-		fmt.Println(err.Error())
-	} else {
-		if resp.Sid != nil {
-			fmt.Println(*resp.Sid)
-		} else {
-			fmt.Println(resp.Sid)
-		}
-	}
+	sid := os.Getenv("TEST_TWILIO_SID")
+	token := os.Getenv("TEST_TWILIO_AUTH_TOKEN")
+
+	ctx = helper.SetTwilioSid(ctx, sid)
+	ctx = helper.SetTwilioAuthToken(ctx, token)
+
+	sms := model_sms.NewSMS(
+		"テストメッセージ本文",
+		"+12019490946",
+		to,
+	)
+
+	client := NewTwilioSMSClient(ctx)
+	err := client.Send(sms)
+
+	assert.NoError(t, err)
 }

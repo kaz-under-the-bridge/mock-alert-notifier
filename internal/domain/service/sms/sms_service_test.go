@@ -20,5 +20,5 @@ func TestSMSSend(t *testing.T) {
 	err := repo.Send(&SMS)
 
 	assert.NoError(t, err)
-	assert.NotNil(t, SMS.SentAt)
+	assert.NotEmpty(t, SMS.GetSentAtJSTFormatRFC3339())
 }

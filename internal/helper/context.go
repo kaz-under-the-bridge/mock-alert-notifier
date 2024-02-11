@@ -5,11 +5,13 @@ import "context"
 type contextKey string
 
 const (
-	appNameKey   contextKey = "appName"
-	logTypeKey   contextKey = "logType"
-	logFileKey   contextKey = "logFile"
-	logFormatKey contextKey = "logFormat"
-	sendgridKey  contextKey = "sendgridKey"
+	appNameKey      contextKey = "appName"
+	logTypeKey      contextKey = "logType"
+	logFileKey      contextKey = "logFile"
+	logFormatKey    contextKey = "logFormat"
+	sendgridKey     contextKey = "sendgridKey"
+	twilioSid       contextKey = "twilioSid"
+	twilioAuthToken contextKey = "twilioAuthToken"
 )
 
 // setter and gettter for context value
@@ -57,4 +59,22 @@ func SetSendgridKey(ctx context.Context, key string) context.Context {
 
 func GetSendgridKey(ctx context.Context) string {
 	return ctx.Value(sendgridKey).(string)
+}
+
+// for twilioSid
+func SetTwilioSid(ctx context.Context, sid string) context.Context {
+	return context.WithValue(ctx, twilioSid, sid)
+}
+
+func GetTwilioSid(ctx context.Context) string {
+	return ctx.Value(twilioSid).(string)
+}
+
+// for twilioAuthToken
+func SetTwilioAuthToken(ctx context.Context, authToken string) context.Context {
+	return context.WithValue(ctx, twilioAuthToken, authToken)
+}
+
+func GetTwilioAuthToken(ctx context.Context) string {
+	return ctx.Value(twilioAuthToken).(string)
 }
