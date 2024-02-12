@@ -4,8 +4,7 @@ Go・クラウドソリューションに対する周辺知識やポートフォ
 [![Go Test](https://github.com/kaz-under-the-bridge/mock-alert-notifier/actions/workflows/go_test.yaml/badge.svg)](https://github.com/kaz-under-the-bridge/mock-alert-notifier/actions/workflows/go_test.yaml)
 
 ## メモ
-- 2024/1/上旬時点ではまだWIPです。
-  - 進捗は後述のタスクリスト参照
+- WIP.進捗は後述のタスクリスト参照
 - 以下のようなツールセットやサービスを使う予定
   - Golang
   - Vscode/devcontainer
@@ -29,7 +28,7 @@ Go・クラウドソリューションに対する周辺知識やポートフォ
     - [x] Amazon Pollyを触ってみる
     - [ ] CloudRunデプロイフロー(あとまわし)
   - [ ] クラウドサービスも含めたコード最終化（2024/2上旬）
-  - [ ] ブラッシュアップ（2024/2月中〜下旬）
+  - [x] ブラッシュアップ（2024/2月中〜下旬）
 
 ## 運用ツールの概観
 

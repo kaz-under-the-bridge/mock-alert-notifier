@@ -152,7 +152,7 @@ func (o Organization) ToMap() map[string]string {
 			continue
 		}
 
-		data[t.Field(i).Name] = v.Field(i).String()
+		data["Organization_"+t.Field(i).Name] = v.Field(i).String()
 		//fmt.Println(t.Field(i).Name) -> 構造体のフィールド名
 		//fmt.Println(v.Field(i).Type().Name()) -> 構造体のフィールドの型名(string, int...)
 		//fmt.Println(v.Field(i).Interface()) -> 構造体のフィールドの値
