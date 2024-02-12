@@ -15,10 +15,10 @@ func TestSMSSend(t *testing.T) {
 	client := infra_sms.NewExportMockSMSClient()
 	repo := repo_sms.NewSMSRepository(ctx, client)
 
-	SMS := model_sms.SMSMessage{}
+	sms := model_sms.SMSMessage{}
 
-	err := repo.Send(&SMS)
+	err := repo.Send(&sms)
 
 	assert.NoError(t, err)
-	assert.NotEmpty(t, SMS.GetSentAtJSTFormatRFC3339())
+	assert.NotEmpty(t, sms.GetSentAtJSTFormatRFC3339())
 }
