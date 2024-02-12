@@ -21,6 +21,22 @@ func init() {
 	// get logFormat from global flag
 	RootCmd.PersistentFlags().StringVar(&globalVarLogFormat, "log-format", "text", "text or json")
 
+	// SMS Command Tree
+	RootCmd.AddCommand(SMSCmd)
+	SMSCmd.AddCommand(SMSSendCmd)
+
+	SMSSendCmd.Flags().BoolVar(&SMSSendAll, "send-to-all", false, "ユーザー台帳全員へSMS送信を行う")
+	SMSSendCmd.Flags().StringVar(&SMSSendUserByIDs, "ids", "", "カンマ区切りの指定IDリストのユーザーにのみSMS送信を行う ※send-to-allより優先されます")
+	SMSSendCmd.Flags().StringVar(&SMSTemplateName, "template-name", "", "送信に使用するテンプレート名(nameフィールドの値)を指定, templates/sms/template.yamlを使用")
+
+	// Voice Command Tree
+	RootCmd.AddCommand(VoiceCmd)
+	VoiceCmd.AddCommand(VoiceCallCmd)
+
+	VoiceCallCmd.Flags().BoolVar(&VoiceCallAll, "call-to-all", false, "ユーザ台帳全員へ電話発信を行う")
+	VoiceCallCmd.Flags().StringVar(&VoiceCallUserByIDs, "ids", "", "カンマ区切りの指定IDリストのユーザーにのみSMS送信を行う ※call-to-allより優先されます")
+	VoiceCallCmd.Flags().StringVar(&VoiceCallURL, "voice-data-url", "", "送信時に使用するデーターのURLを指定する ※必須")
+
 	setBasicConfigTo(ctx)
 }
 

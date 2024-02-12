@@ -9,17 +9,17 @@ import (
 func TestOrgToMap(t *testing.T) {
 	org := Organization{
 		ID:          1,
-		Name:        "test org name",
-		Team:        "test team name",
-		Email:       "test@example.com",
+		Name:        "◯◯株式会社",
+		Team:        "開発部",
+		Email:       "dev@example.com",
 		PhoneNumber: "03-1234-5678",
 	}
 
 	want := map[string]string{
-		"Name":        "test org name",
-		"Team":        "test team name",
-		"Email":       "test@example.com",
-		"PhoneNumber": "03-1234-5678",
+		"Organization_Name":        "◯◯株式会社",
+		"Organization_Team":        "開発部",
+		"Organization_Email":       "dev@example.com",
+		"Organization_PhoneNumber": "03-1234-5678",
 	}
 
 	got := org.ToMap()

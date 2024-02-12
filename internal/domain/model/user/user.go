@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"reflect"
 	"regexp"
 )
@@ -154,9 +155,13 @@ func (u User) ToMap() map[string]string {
 
 	for i := 0; i < v.NumField(); i++ {
 		if t.Field(i).Type.Kind() == reflect.String {
-			data[t.Field(i).Name] = v.Field(i).String()
+			data["User_"+t.Field(i).Name] = v.Field(i).String()
 		}
 	}
 
 	return data
+}
+
+func (u User) FullName() string {
+	return fmt.Sprintf("%s %s", u.FamilyName, u.GivenName)
 }

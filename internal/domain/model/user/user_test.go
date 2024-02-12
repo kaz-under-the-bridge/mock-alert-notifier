@@ -19,10 +19,10 @@ func TestUserToMap(t *testing.T) {
 	}
 
 	want := map[string]string{
-		"FamilyName":  "鈴木",
-		"GivenName":   "テスト",
-		"Email":       "test@example.com",
-		"PhoneNumber": "03-1234-5678",
+		"User_FamilyName":  "鈴木",
+		"User_GivenName":   "テスト",
+		"User_Email":       "test@example.com",
+		"User_PhoneNumber": "03-1234-5678",
 	}
 
 	got := user.ToMap()
