@@ -1,4 +1,4 @@
-package organization
+package org
 
 import model "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/org"
 

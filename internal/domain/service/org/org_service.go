@@ -1,10 +1,10 @@
-package organization
+package org
 
 import (
 	"context"
 
 	model_org "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/org"
-	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/repository/organization"
+	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/repository/org"
 )
 
 type ServiceInterface interface {
@@ -13,10 +13,10 @@ type ServiceInterface interface {
 
 type Service struct {
 	ctx  context.Context
-	repo organization.RepositoryInterface
+	repo org.RepositoryInterface
 }
 
-func NewOrganizationService(ctx context.Context, r organization.RepositoryInterface) ServiceInterface {
+func NewOrganizationService(ctx context.Context, r org.RepositoryInterface) ServiceInterface {
 	return &Service{ctx: ctx, repo: r}
 }
 

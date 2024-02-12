@@ -4,7 +4,9 @@ import (
 	"context"
 	"testing"
 
+	model_org "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/org"
 	model_user "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/model/user"
+	service_org "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/service/org"
 	service_user "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/service/user"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/helper"
 )
@@ -12,15 +14,13 @@ import (
 type MockUserRepository struct{}
 
 func (m *MockUserRepository) GetUsers() (*model_user.Users, error) {
-	users := &model_user.Users{}
+	return service_user.GenerateDummyUsers(), nil
+}
 
-	dummyUsers := service_user.GenerateDummyUsers()
+type MockOrganizationRepository struct{}
 
-	for _, elm := range dummyUsers {
-		users.Push(elm)
-	}
-
-	return users, nil
+func (m *MockOrganizationRepository) GetOrganizations() (*model_org.Organizations, error) {
+	return service_org.GenerateDummyOrgs(), nil
 }
 
 func TestMain(m *testing.M) {
