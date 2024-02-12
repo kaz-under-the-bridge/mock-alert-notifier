@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"reflect"
 	"regexp"
 )
@@ -159,4 +160,8 @@ func (u User) ToMap() map[string]string {
 	}
 
 	return data
+}
+
+func (u User) FullName() string {
+	return fmt.Sprintf("%s %s", u.FamilyName, u.GivenName)
 }

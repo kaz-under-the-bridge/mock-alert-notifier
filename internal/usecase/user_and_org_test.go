@@ -9,6 +9,7 @@ import (
 	service_org "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/service/org"
 	service_user "github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/service/user"
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/helper"
+	"github.com/stretchr/testify/assert"
 )
 
 type MockUserRepository struct{}
@@ -32,8 +33,21 @@ func TestMain(m *testing.M) {
 }
 
 func TestGetUsersAndOrgs(t *testing.T) {
-	repo := &MockUserRepository{}
-	users := service_user.NewUserService(context.Background(), repo)
+	userRepo := &MockUserRepository{}
+	users := service_user.NewUserService(context.Background(), userRepo)
 
-	users.FindByEmail("test@example.com")
+	orgRepo := &MockOrganizationRepository{}
+	orgs := service_org.NewOrganizationService(context.Background(), orgRepo)
+
+	_, err := users.FindByEmail("test@example.com")
+	assert.Error(t, err)
+
+	user, _ := users.FindByEmail("taro@example.com")
+	assert.Equal(t, "テスト 太郎", user.FullName())
+
+	_, err = orgs.FindByID(0)
+	assert.Error(t, err)
+
+	org, _ := orgs.FindByID(1)
+	assert.Equal(t, "〇〇株式会社", org.Name)
 }
