@@ -7,10 +7,10 @@ import (
 	"github.com/kaz-under-the-bridge/mock-alert-notifier/internal/domain/repository/sms"
 )
 
-//var _ ServiceInterface = (*Service)(nil)
+var _ ServiceInterface = (*Service)(nil)
 
 type ServiceInterface interface {
-	Send(SMS model_sms.SMSMessage) error
+	Send(sms *model_sms.SMSMessage) error
 }
 
 type Service struct {
@@ -18,10 +18,10 @@ type Service struct {
 	repo sms.RepositoryInterface
 }
 
-func NewSMSService(ctx context.Context, r sms.RepositoryInterface) *Service {
+func NewSMSService(ctx context.Context, r sms.RepositoryInterface) ServiceInterface {
 	return &Service{ctx: ctx, repo: r}
 }
 
-func (s *Service) Send(SMS *model_sms.SMSMessage) error {
-	return s.repo.Send(SMS)
+func (s *Service) Send(sms *model_sms.SMSMessage) error {
+	return s.repo.Send(sms)
 }
